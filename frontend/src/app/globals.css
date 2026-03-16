@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #f8f4eb;
+  --color-text: #1f2428;
+  --color-muted: #5e656d;
+  --color-soft: #efe8da;
+  --color-primary: #e96643;
+  --color-primary-strong: #c84f2f;
+  --color-accent: #0a7f86;
+}
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-space-mono);
+}
+
+* {
+  border-color: rgba(20, 20, 20, 0.1);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.02em;
+}
+
+@keyframes float-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+main > section {
+  animation: float-in 420ms ease both;
+}
+
+.toast-enter {
+  animation: toast-enter 220ms ease both;
+}

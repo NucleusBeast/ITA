@@ -1,0 +1,83 @@
+import { Activity, Building2, Mail, MapPin, Star } from "lucide-react";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getApplicationsForCurrentUser } from "@/lib/api/applications";
+import { getCurrentUser } from "@/lib/api/users";
+
+export default async function ProfilePage() {
+  const user = await getCurrentUser();
+  const applications = await getApplicationsForCurrentUser();
+
+  const confirmed = applications.filter((app) => app.status === "Confirmed").length;
+
+  return (
+    <main className="mx-auto w-full max-w-6xl space-y-8 px-4 py-10 md:px-8">
+      <section className="grid gap-6 lg:grid-cols-[1.2fr_2fr]">
+        <Card>
+          <CardHeader className="items-start gap-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-primary)] text-xl font-bold text-white">
+              {user.avatarInitials}
+            </div>
+            <div>
+              <CardTitle>{user.name}</CardTitle>
+              <p className="text-sm text-[var(--color-muted)]">{user.role}</p>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-[var(--color-muted)]">
+            <p className="inline-flex items-center gap-2">
+              <Mail className="h-4 w-4" />
+              {user.email}
+            </p>
+            <p className="inline-flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              {user.city}
+            </p>
+            <p className="inline-flex items-center gap-2">
+              <Building2 className="h-4 w-4" />
+              ITA Event Platform
+            </p>
+          </CardContent>
+        </Card>
+
+        <section className="grid gap-4 sm:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Applications</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-semibold">{applications.length}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Confirmed</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-semibold">{confirmed}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex-row items-center justify-between">
+              <CardTitle className="text-base">Engagement</CardTitle>
+              <Activity className="h-4 w-4 text-[var(--color-accent)]" />
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-[var(--color-muted)]">
+                High activity this month, strong attendance consistency.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex-row items-center justify-between">
+              <CardTitle className="text-base">Organizer score</CardTitle>
+              <Star className="h-4 w-4 text-[var(--color-primary)]" />
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-semibold">4.8</p>
+            </CardContent>
+          </Card>
+        </section>
+      </section>
+    </main>
+  );
+}
