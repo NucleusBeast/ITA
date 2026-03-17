@@ -9,6 +9,7 @@ const navItems = [
   { href: "/events/create", label: "Create" },
   { href: "/applications", label: "Applications" },
   { href: "/profile", label: "Profile" },
+  { href: "/auth", label: "Sign In" },
 ];
 
 export function SiteHeader() {

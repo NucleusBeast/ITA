@@ -34,6 +34,7 @@ docker compose up --build frontend
 - `/events/create` create event UI
 - `/applications` applications status UI
 - `/profile` user dashboard UI
+- `/auth` sign in / sign up
 
 ## Future Backend Wiring
 
@@ -43,3 +44,13 @@ The compose file exposes placeholders for future microservice endpoints:
 - `NEXT_PUBLIC_USERS_API_URL`
 
 Adapters in `src/lib/api` are intentionally isolated, so replacing mock data with real HTTP calls should not require page-level rewrites.
+
+Users adapter supports live API integration with optional environment variables:
+- `NEXT_PUBLIC_USERS_API_URL` or `USERS_API_URL`
+
+Auth flow now uses frontend API routes:
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+
+On successful sign in or sign up, frontend stores an HttpOnly cookie (`ita_auth_token`) and profile fetches `/users/me` with that token.

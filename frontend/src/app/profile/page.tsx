@@ -1,17 +1,28 @@
 import { Activity, Building2, Mail, MapPin, Star } from "lucide-react";
+import { redirect } from "next/navigation";
 
+import { LogoutButton } from "@/components/auth/logout-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getApplicationsForCurrentUser } from "@/lib/api/applications";
 import { getCurrentUser } from "@/lib/api/users";
 
 export default async function ProfilePage() {
   const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/auth");
+  }
+
   const applications = await getApplicationsForCurrentUser();
 
   const confirmed = applications.filter((app) => app.status === "Confirmed").length;
 
   return (
     <main className="mx-auto w-full max-w-6xl space-y-8 px-4 py-10 md:px-8">
+      <div className="flex justify-end">
+        <LogoutButton />
+      </div>
+
       <section className="grid gap-6 lg:grid-cols-[1.2fr_2fr]">
         <Card>
           <CardHeader className="items-start gap-4">
