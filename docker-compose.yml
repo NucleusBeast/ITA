@@ -15,3 +15,22 @@ services:
       - /app/node_modules
       - /app/.next
     restart: unless-stopped
+
+  users:
+    build:
+      context: ./users
+      dockerfile: Dockerfile
+    container_name: ita-users
+    ports:
+      - "8082:8082"
+    environment:
+      PORT: 8082
+      CORS_ORIGIN: http://localhost:3000
+      JWT_SECRET: change-me-in-production
+      JWT_EXPIRES_IN: 1h
+      CONVEX_URL: ${USERS_CONVEX_URL}
+      CONVEX_ADMIN_KEY: ${USERS_CONVEX_ADMIN_KEY:-}
+    volumes:
+      - ./users:/app
+      - /app/node_modules
+    restart: unless-stopped
