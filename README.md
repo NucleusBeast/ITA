@@ -127,3 +127,19 @@ Namen projekta
 
 
 Namen projekta je prikazati uporabo mikrostoritvene arhitekture, načel čiste arhitekture ter upravljanje komunikacije med več neodvisnimi storitvami v sodobnih spletnih aplikacijah.
+
+## Nova storitev dogodki (gRPC)
+
+Dodana je nova mikrostoritev `events`, ki uporablja gRPC in ima svojo ločeno Convex podatkovno bazo.
+
+### Potrebne okoljske spremenljivke (docker compose)
+
+- `EVENTS_CONVEX_URL`
+- `EVENTS_CONVEX_ADMIN_KEY` (opcijsko)
+- `USERS_CONVEX_URL`
+- `USERS_CONVEX_ADMIN_KEY` (opcijsko)
+
+### Opombe
+
+- Frontend komunicira z dogodki prek Next.js API mostu (`/api/events`), ta pa kliče gRPC storitev `events:8080`.
+- Pred zagonom je potrebno inicializirati ločen Convex deployment za mapo `events`.

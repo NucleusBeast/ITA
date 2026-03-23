@@ -7,10 +7,16 @@ export function notFoundHandler(_req: Request, res: Response): void {
 
 export function errorHandler(
   err: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   _next: NextFunction,
 ): void {
+  const timestamp = new Date().toISOString();
+  const errorMessage = err instanceof Error ? err.message : "Unknown error";
+  console.error(
+    `[${timestamp}] ERROR ${req.method} ${req.originalUrl} - ${errorMessage}`,
+  );
+
   if (err instanceof ZodError) {
     res.status(400).json({
       error: "Validation failed",

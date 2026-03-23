@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { CalendarCheck2 } from "lucide-react";
 
+import { LogoutButton } from "@/components/auth/logout-button";
+import { getCurrentUser } from "@/lib/api/users";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -8,11 +10,11 @@ const navItems = [
   { href: "/events", label: "Events" },
   { href: "/events/create", label: "Create" },
   { href: "/applications", label: "Applications" },
-  { href: "/profile", label: "Profile" },
-  { href: "/auth", label: "Sign In" },
 ];
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const user = await getCurrentUser();
+
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-[#f8f4eb]/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 md:px-8">
@@ -35,6 +37,32 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          {user ? (
+            <>
+              <Link
+                href="/profile"
+                className={cn(
+                  "rounded-lg px-3 py-2 text-sm font-medium text-[var(--color-muted)] transition",
+                  "hover:bg-white/80 hover:text-[var(--color-text)]",
+                )}
+              >
+                Profile
+              </Link>
+              <div className="pl-2">
+                <LogoutButton />
+              </div>
+            </>
+          ) : (
+            <Link
+              href="/auth"
+              className={cn(
+                "rounded-lg px-3 py-2 text-sm font-medium text-[var(--color-muted)] transition",
+                "hover:bg-white/80 hover:text-[var(--color-text)]",
+              )}
+            >
+              Sign In
+            </Link>
+          )}
         </nav>
       </div>
     </header>

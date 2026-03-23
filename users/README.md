@@ -10,6 +10,8 @@ Express + TypeScript users microservice using Convex cloud as persistence.
 - GET /users/me
 - GET /users/:id
 - PATCH /users/:id
+- GET /docs (Swagger UI)
+- GET /docs.json (OpenAPI spec)
 
 ## Setup
 
@@ -52,6 +54,27 @@ Production build:
 npm run build
 npm run start
 ```
+
+Swagger UI:
+
+```bash
+http://localhost:8082/docs
+```
+
+OpenAPI JSON:
+
+```bash
+http://localhost:8082/docs.json
+```
+
+## Logging
+
+During runtime, the service logs:
+
+- startup events
+- every HTTP request (method, path, status, duration)
+- handled errors in error middleware
+- process-level `unhandledRejection` and `uncaughtException` events
 
 ## API examples
 

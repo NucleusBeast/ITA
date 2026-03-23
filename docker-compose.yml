@@ -10,6 +10,8 @@ services:
       NEXT_PUBLIC_EVENTS_API_URL: http://events:8080
       NEXT_PUBLIC_APPLICATIONS_API_URL: http://applications:8081
       NEXT_PUBLIC_USERS_API_URL: http://users:8082
+      EVENTS_GRPC_ADDRESS: events:8080
+      APP_URL: http://localhost:3000
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -32,5 +34,23 @@ services:
       CONVEX_ADMIN_KEY: ${USERS_CONVEX_ADMIN_KEY:-}
     volumes:
       - ./users:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  events:
+    build:
+      context: ./events
+      dockerfile: Dockerfile
+    container_name: ita-events
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      GRPC_PORT: 8080
+      JWT_SECRET: change-me-in-production
+      CONVEX_URL: ${EVENTS_CONVEX_URL}
+      CONVEX_ADMIN_KEY: ${EVENTS_CONVEX_ADMIN_KEY:-}
+    volumes:
+      - ./events:/app
       - /app/node_modules
     restart: unless-stopped

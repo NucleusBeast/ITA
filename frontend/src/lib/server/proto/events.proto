@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package events;
+
+service EventsService {
+  rpc ListEvents (ListEventsRequest) returns (ListEventsResponse);
+  rpc GetEvent (GetEventRequest) returns (GetEventResponse);
+  rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse);
+  rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse);
+  rpc DeleteEvent (DeleteEventRequest) returns (DeleteEventResponse);
+}
+
+message Event {
+  string id = 1;
+  string title = 2;
+  string tagline = 3;
+  string description = 4;
+  string date = 5;
+  string time = 6;
+  string location = 7;
+  string mode = 8;
+  string category = 9;
+  uint32 capacity = 10;
+  uint32 registered = 11;
+  string priceLabel = 12;
+  string host = 13;
+  string coverGradient = 14;
+  bool featured = 15;
+  string createdBy = 16;
+  string createdAt = 17;
+  string updatedAt = 18;
+}
+
+message EventInput {
+  string title = 1;
+  string tagline = 2;
+  string description = 3;
+  string date = 4;
+  string time = 5;
+  string location = 6;
+  string mode = 7;
+  string category = 8;
+  uint32 capacity = 9;
+  string priceLabel = 10;
+  string host = 11;
+  string coverGradient = 12;
+  bool featured = 13;
+}
+
+message EventPatch {
+  string title = 1;
+  string tagline = 2;
+  string description = 3;
+  string date = 4;
+  string time = 5;
+  string location = 6;
+  string mode = 7;
+  string category = 8;
+  uint32 capacity = 9;
+  uint32 registered = 10;
+  string priceLabel = 11;
+  string host = 12;
+  string coverGradient = 13;
+  bool featured = 14;
+}
+
+message ListEventsRequest {
+  string category = 1;
+}
+
+message ListEventsResponse {
+  repeated Event events = 1;
+}
+
+message GetEventRequest {
+  string id = 1;
+}
+
+message GetEventResponse {
+  Event event = 1;
+}
+
+message CreateEventRequest {
+  EventInput event = 1;
+}
+
+message CreateEventResponse {
+  Event event = 1;
+}
+
+message UpdateEventRequest {
+  string id = 1;
+  EventPatch patch = 2;
+}
+
+message UpdateEventResponse {
+  Event event = 1;
+}
+
+message DeleteEventRequest {
+  string id = 1;
+}
+
+message DeleteEventResponse {
+  bool deleted = 1;
+}

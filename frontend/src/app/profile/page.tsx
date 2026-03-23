@@ -1,6 +1,6 @@
 import { Activity, Building2, Mail, MapPin, Star } from "lucide-react";
-import { redirect } from "next/navigation";
 
+import { AuthFormCard } from "@/components/auth/auth-form-card";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getApplicationsForCurrentUser } from "@/lib/api/applications";
@@ -10,7 +10,20 @@ export default async function ProfilePage() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/auth");
+    return (
+      <main className="mx-auto w-full max-w-3xl space-y-6 px-4 py-10 md:px-8">
+        <section className="space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+            Your Account
+          </p>
+          <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">Sign in to view your profile</h1>
+          <p className="max-w-2xl text-[var(--color-muted)]">
+            Profile and application history are available after sign in.
+          </p>
+        </section>
+        <AuthFormCard allowSignup={false} redirectTo="/profile" />
+      </main>
+    );
   }
 
   const applications = await getApplicationsForCurrentUser();
