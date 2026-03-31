@@ -5,14 +5,17 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/toast-provider";
+import { applyToEvent, withdrawApplication } from "@/lib/api/applications";
 
 interface ApplyPanelProps {
+  eventId: string;
   eventTitle: string;
-  isAlreadyApplied: boolean;
+  initialApplicationId?: string;
 }
 
-export function ApplyPanel({ eventTitle, isAlreadyApplied }: ApplyPanelProps) {
-  const [applied, setApplied] = useState(isAlreadyApplied);
+export function ApplyPanel({ eventId, eventTitle, initialApplicationId }: ApplyPanelProps) {
+  const [applied, setApplied] = useState(Boolean(initialApplicationId));
+  const [applicationId, setApplicationId] = useState<string | undefined>(initialApplicationId);
   const [pendingAction, setPendingAction] = useState<"apply" | "withdraw" | null>(
     null,
   );
@@ -24,30 +27,58 @@ export function ApplyPanel({ eventTitle, isAlreadyApplied }: ApplyPanelProps) {
     }
 
     setPendingAction("apply");
-    await new Promise((resolve) => window.setTimeout(resolve, 700));
-    setApplied(true);
-    setPendingAction(null);
-    showToast({
-      title: "Application submitted",
-      description: `You are now marked as applied for ${eventTitle}.`,
-      variant: "success",
-    });
+    try {
+      const application = await applyToEvent(eventId);
+      setApplied(true);
+      setApplicationId(application.id);
+      showToast({
+        title: "Application submitted",
+        description: `You are now marked as applied for ${eventTitle}.`,
+        variant: "success",
+      });
+    } catch (error) {
+      showToast({
+        title: "Application failed",
+        description: error instanceof Error ? error.message : "Unable to submit your application.",
+        variant: "error",
+      });
+    } finally {
+      setPendingAction(null);
+    }
   }
 
   async function handleWithdraw() {
-    if (!applied || pendingAction) {
+    if (!applied || pendingAction || !applicationId) {
       return;
     }
 
     setPendingAction("withdraw");
-    await new Promise((resolve) => window.setTimeout(resolve, 700));
-    setApplied(false);
-    setPendingAction(null);
-    showToast({
-      title: "Application withdrawn",
-      description: `Your application status for ${eventTitle} is now cleared.`,
-      variant: "info",
-    });
+    try {
+      const deleted = await withdrawApplication(applicationId);
+      if (deleted) {
+        setApplied(false);
+        setApplicationId(undefined);
+        showToast({
+          title: "Application withdrawn",
+          description: `Your application status for ${eventTitle} is now cleared.`,
+          variant: "info",
+        });
+      } else {
+        showToast({
+          title: "Already removed",
+          description: "This application no longer exists.",
+          variant: "info",
+        });
+      }
+    } catch (error) {
+      showToast({
+        title: "Withdraw failed",
+        description: error instanceof Error ? error.message : "Unable to withdraw application.",
+        variant: "error",
+      });
+    } finally {
+      setPendingAction(null);
+    }
   }
 
   return (
@@ -57,7 +88,7 @@ export function ApplyPanel({ eventTitle, isAlreadyApplied }: ApplyPanelProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-sm text-[var(--color-muted)]">
-          Apply to <strong>{eventTitle}</strong>. This interaction is currently simulated in frontend state.
+          Apply to <strong>{eventTitle}</strong>. Your selection is persisted through the applications service.
         </p>
         {applied ? (
           <div className="rounded-xl bg-[#e4f9ea] px-4 py-3 text-sm font-medium text-[#0f7a3f]">

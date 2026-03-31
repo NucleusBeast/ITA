@@ -57,7 +57,11 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
           </CardContent>
         </Card>
 
-        <ApplyPanel eventTitle={event.title} isAlreadyApplied={Boolean(applyPreview)} />
+        <ApplyPanel
+          eventId={event.id}
+          eventTitle={event.title}
+          initialApplicationId={applyPreview?.id}
+        />
       </section>
     </main>
   );

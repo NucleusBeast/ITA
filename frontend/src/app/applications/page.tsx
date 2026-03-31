@@ -15,7 +15,7 @@ export default async function ApplicationsPage() {
         </p>
         <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">Your event applications</h1>
         <p className="max-w-2xl text-[var(--color-muted)]">
-          Track application states across all events while backend services are still in progress.
+          Track your live application states across all events.
         </p>
       </section>
       <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">

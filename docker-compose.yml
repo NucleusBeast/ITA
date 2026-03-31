@@ -54,3 +54,21 @@ services:
       - ./events:/app
       - /app/node_modules
     restart: unless-stopped
+
+  applications:
+    build:
+      context: ./applications
+      dockerfile: Dockerfile
+    container_name: ita-applications
+    ports:
+      - "8081:8081"
+    environment:
+      PORT: 8081
+      CORS_ORIGIN: http://localhost:3000
+      JWT_SECRET: change-me-in-production
+      CONVEX_URL: ${APPLICATIONS_CONVEX_URL}
+      CONVEX_ADMIN_KEY: ${APPLICATIONS_CONVEX_ADMIN_KEY:-}
+    volumes:
+      - ./applications:/app
+      - /app/node_modules
+    restart: unless-stopped
